@@ -9,6 +9,7 @@ Requirements in your device
     VUE CLI
     NPM
     NVM (Node Version Manager to manage the node versions)
+    MONGO DB
 }
 1 . Download zip file
 2 . cd Downloads/frontend/
