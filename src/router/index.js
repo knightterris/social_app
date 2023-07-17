@@ -1,25 +1,60 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHashHistory } from "vue-router";
+import LoginView from "../views/LoginView.vue";
+import RegisterView from "../views/RegisterView.vue";
+import IndexView from "../views/IndexView.vue";
+import ProfileView from "../views/ProfileView.vue";
+import NotiView from "../views/NotiView.vue";
+import FriendView from "../views/FriendView.vue";
+import MessageView from "../views/MessageView.vue";
+import CreatePostView from "../views/CreatePostView.vue";
 
 const routes = [
   {
-    path: '/',
-    name: 'home',
-    component: HomeView
+    path: "/",
+    name: "login",
+    component: LoginView,
+  },
+
+  {
+    path: "/register",
+    name: "register",
+    component: RegisterView,
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
-]
+    path: "/index",
+    name: "index",
+    component: IndexView,
+  },
+  {
+    path: "/friend",
+    name: "friend",
+    component: FriendView,
+  },
+  {
+    path: "/noti",
+    name: "noti",
+    component: NotiView,
+  },
+  {
+    path: "/profile",
+    name: "profile",
+    component: ProfileView,
+  },
+  {
+    path: "/message",
+    name: "message",
+    component: MessageView,
+  },
+  {
+    path: "/post",
+    name: "post",
+    component: CreatePostView,
+  },
+];
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;

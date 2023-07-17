@@ -8,11 +8,25 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@upload-io/vue-uploader": "^3.33.0",
+    "axios": "^1.4.0",
+    "body-parser": "^1.20.2",
     "core-js": "^3.8.3",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "fs": "^0.0.1-security",
+    "fs-extra": "^11.1.1",
+    "moment": "^2.29.4",
+    "mongoose": "^7.3.2",
     "register-service-worker": "^1.7.2",
+    "sweetalert2": "^11.7.12",
+    "typescript": "^5.1.6",
+    "upload-js": "^2.20.0",
+    "uploader": "^3.37.0",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
-    "vuex": "^4.0.0"
+    "vuex": "^4.0.0",
+    "websocket": "^1.0.34"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
