@@ -30,7 +30,7 @@ Requirements in your device
 ## Introduction
 
 <p align="center">
-  <img src="./Introduction/1.png" alt="Image description">
+  <img src="./Introduction/1.png" alt="Image description" style="max-width: 100%;height: 500px;">
 </p>
 
 ### Compiles and minifies for production
