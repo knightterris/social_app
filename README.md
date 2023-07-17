@@ -1,6 +1,8 @@
-# frontend
+# Network
 
 ## Project setup
+
+### This is a social web app ,developed with MEVN stack, called "Network".
 
 ```
 Requirements in your device
