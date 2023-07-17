@@ -27,6 +27,12 @@ Requirements in your device
 1 . npm run dev (in the server directory)
 ```
 
+## Introduction
+
+<p align="center">
+  <img src="./Introduction/1.png" alt="Image description">
+</p>
+
 ### Compiles and minifies for production
 
 ```
