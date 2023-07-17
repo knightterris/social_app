@@ -1,8 +1,8 @@
 .DS_Store
 node_modules
 /dist
-server/uploads/
-server/pfp/
+./server/uploads
+./server/pfp
 
 
 # local env files
