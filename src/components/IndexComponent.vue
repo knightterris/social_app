@@ -420,7 +420,10 @@ export default {
     },
   },
   mounted() {
-    const userData = JSON.parse(localStorage.getItem("user"));
+    console.log(this.$store.state.userData)
+    console.log(this.$store.getters.getUserData.name)
+    const userData = this.$store.getters.getUserData;
+    // const userData = JSON.parse(localStorage.getItem("user"));
     // console.log(userData);
     const login_email = userData.email;
     const userId = userData._id;

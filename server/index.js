@@ -88,14 +88,10 @@ app.post("/login", async (req, res) => {
       const token = jwt.sign(user, secret);
       return res.send({ token, user });
     } else {
-      return res
-        .status(400)
-        .json({ msg: "Something went wrong! Please try again!" });
+      return res.status(400).json({ msg: "Something went wrong! Please try again!" });
     }
   } else {
-    return res
-      .status(400)
-      .json({ msg: "Something went wrong! Please try again!" });
+    return res.status(400).json({ msg: "Something went wrong! Please try again!" });
   }
 });
 

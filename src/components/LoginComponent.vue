@@ -90,11 +90,12 @@ export default {
                 title: "Login is successful.",
               });
               localStorage.setItem("token", res.data.token);
-              localStorage.setItem("user", JSON.stringify(res.data.user));
+              this.$store.dispatch('saveUserData',res.data.user);
+              // localStorage.setItem("user", JSON.stringify(res.data.user));
             }
           })
           .catch((error) => {
-            // console.error(error.response.status);
+            console.error(error.response.status);
             if (error.response.status == 400) {
               this.$router.push("/");
               const Toast = Swal.mixin({

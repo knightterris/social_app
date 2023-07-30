@@ -85,7 +85,7 @@
     </div>
   </div>
 
-  <router-link to="/post" v-if="!postIconStatus" class="float" id="my-float">
+  <router-link to="/post" v-if="!postIconStatus" class="float" id="myfloat">
     <i class="bx bxs-network-chart my-float" ></i>
   </router-link>
   <slot></slot>
@@ -143,16 +143,13 @@ export default {
     // Function to show the navigation and reset the timeout
     function showNavigation() {
       const navigation = document.getElementById('bottom-nav');
-      const floatIcon = document.getElementById('my-float');
       navigation.style.display = 'block';
-      floatIcon.style.bottom = '85px';
 
       clearTimeout(scrollTimeout);
 
       // Hide the navigation after 2 seconds of inactivity
       scrollTimeout = setTimeout(() => {
         navigation.style.display = 'none';
-        floatIcon.style.bottom = '5px';
       }, 2000);
     }
 

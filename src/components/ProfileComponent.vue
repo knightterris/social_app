@@ -651,7 +651,8 @@ export default {
             this.userData.user_location = res.data.user_location;
             this.userData.user_bio = res.data.user_bio;
             this.profile_image = res.data.image;
-            localStorage.setItem("user", JSON.stringify(res.data));
+            this.$store.dispatch('saveUserData',res.data);
+            // localStorage.setItem("user", JSON.stringify(res.data));
             const Toast = Swal.mixin({
               toast: true,
               position: "top-end",
@@ -783,7 +784,8 @@ export default {
     },
   },
   mounted() {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = this.$store.getters.getUserData;
+    // const user = JSON.parse(localStorage.getItem("user"));
     // console.log(user.name);
     this.userData.name = user.name;
     this.userData.email = user.email;
