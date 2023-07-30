@@ -87,8 +87,8 @@ export default {
       var formData = new FormData();
       formData.append("uploadType", "postPicture");
       formData.append("post_caption", this.postData.caption);
-      formData.append("post_creator", this.postData.creator);
-      formData.append("post_creator_email", this.postData.creator_mail);
+      formData.append("post_creator", this.userData.name);
+      formData.append("post_creator_email", this.userData.email);
       formData.append("post_created_at", this.postData.created_at);
       formData.append("post_image", this.postData.image);
       axios.post(`${api}/create/post`, formData).then(async (res) => {
@@ -98,7 +98,7 @@ export default {
             position: "top-end",
             showConfirmButton: false,
             timer: 2000,
-            timerProgressBar: true,
+            timerProgressBar: false,
           });
 
           Toast.fire({

@@ -24,7 +24,8 @@ Requirements in your device
 
 ```
 1 . npm run serve (in the frontend directory)
-1 . npm run dev (in the server directory)
+2 . npm run dev (in the server directory)
+3 . make sure that your MongoDB server has started.
 ```
 
 ## Introduction

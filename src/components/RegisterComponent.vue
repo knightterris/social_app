@@ -131,7 +131,7 @@ export default {
               position: "top-end",
               showConfirmButton: false,
               timer: 2000,
-              timerProgressBar: true,
+              timerProgressBar: false,
             });
 
             Toast.fire({

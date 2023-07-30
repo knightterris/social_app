@@ -49,18 +49,23 @@
                   </li>
 
                   <li>
-                    <router-link class="dropdown-item" to="#">Save</router-link>
+                    <p
+                      class="dropdown-item"
+                      @click="savePost(post._id)"
+                    >
+                      Save
+                    </p>
                   </li>
                 </ul>
               </div>
             </div>
             <!-- linebreak -->
-            <div class="p-1">
+            <div v-if="post.image && post.image != null && post.image != ''" class="p-1">
               <hr class="text-white" />
             </div>
             <!-- content -->
             <div class="content">
-              <div class="content-img p-2">
+              <div v-if="post.image" class="content-img p-2">
                 <img
                   :src="getImageUrl(post.image)"
                   class="w-100 h-100 object-fit-contain"
@@ -79,20 +84,25 @@
                   <li
                     class="w-100 d-flex align-items-center justify-content-center border border-info border-top-0 border-start-0 border-bottom-0 p-2"
                   >
-                    <i class="bx bxs-heart-circle text-info"></i>
-                    <span class="action-text text-info">100Likes</span>
+                    <i class="text-info bx" :class="{'bxs-heart': isLikedByCurrentUser(post), 'bx-heart': !isLikedByCurrentUser(post)}" 
+                       @click="toggleLike(post._id)"
+                    >
+                    </i>
+
+                    <span class="action-text text-info" data-bs-toggle="modal"
+                        data-bs-target="#likeUsers" @click="showLikeUser = post">{{ post.reactions?.length ? post.reactions?.length : 0}}</span>
                   </li>
                   <li
                     class="w-100 d-flex align-items-center justify-content-center border border-info border-top-0 border-start-0 border-bottom-0 p-2"
                   >
-                    <i class="bx bxs-comment-dots text-info"></i>
-                    <span class="action-text text-info">100Chats</span>
+                    <i class='bx bx-message-dots text-info'></i>
+                    <span class="action-text text-info">100</span>
                   </li>
                   <li
                     class="w-100 d-flex align-items-center justify-content-center p-2"
                   >
-                    <i class="bx bx-repost text-info"></i>
-                    <span class="action-text text-info">100Reposts</span>
+                    <i class='bx bx-share-alt text-info'></i>
+                    <span class="action-text text-info">100</span>
                   </li>
                 </ul>
               </div>
@@ -103,7 +113,7 @@
     </LayoutComponent>
 
     <!-- modal -->
-    <!-- Modal -->
+    <!-- edit  Modal -->
     <div class="modal fade5" id="staticBackdrop">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -123,12 +133,14 @@
               <div class="d-flex align-items-center p-2">
                 <div class="img-div">
                   <img
-                    src="https://i.quotev.com/62m3azvpaaaa.jpg"
+                    :src="getProfileUrl(selectedPost.creator[0].image)"
                     class="rounded-circle w-100 h-100 object-fit-fill"
                   />
                 </div>
                 <div class="ms-4 name-div">
-                  <p class="text-dark mt-3">{{ selectedPost.creator }}</p>
+                  <p class="text-dark mt-3">
+                    {{ selectedPost.creator[0].name }}
+                  </p>
                 </div>
               </div>
               <input
@@ -181,6 +193,48 @@
         </div>
       </div>
     </div>
+    <!-- show like users modal -->
+      <div class="modal fade5" id="likeUsers">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                Liked by
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="" v-if="showLikeUser.liked_users != []">
+                <div class="m-2 p-2" v-for="(users,index) in showLikeUser.liked_users" :key="index">
+                  <div class="container">
+                    <div class="friend-card">
+                      <div class="d-flex align-items-center p-2">
+                        <div class="parent-profile-card">
+                          <img
+                          :src="getProfileUrl(users.image)"
+                            class="rounded-circle object-fit-fill profile-pic"
+                          />
+                        </div>
+                        <div class="ms-4 name-div">
+                          <p class="text-dark mt-3">{{ users.name }}</p>
+                        </div>
+                        <div class="ms-auto">
+                          <i class="bx bxs-user-plus text-dark"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
   </div>
 </template>
 
@@ -188,6 +242,8 @@
 import axios from "axios";
 import Swal from "sweetalert2";
 import moment from "moment";
+// import { io } from 'socket.io-client';
+// const socket = io('http://localhost:8000');
 const api = "http://localhost:8000";
 import LayoutComponent from "../components/LayoutComponent.vue";
 export default {
@@ -199,15 +255,20 @@ export default {
     return {
       user: {
         email: "",
+        id:"",
       },
       posts: [],
+      users: [],
       editBtnStatus: "",
       selectedPost: null,
+      showLikeUser:[],
       previewImageStatus: false,
       newImage: null,
+      isCurrentPost:false,
     };
   },
   methods: {
+
     getImageUrl(filename) {
       return `${api}/uploads/${filename}`;
     },
@@ -242,7 +303,7 @@ export default {
         // console.log(res.data);
         if (res.status == 200) {
           axios.get(`${api}/get/posts`).then((res) => {
-            this.posts = res.data;
+            this.posts = res.data.reverse();
           });
 
           this.$router.push("/index");
@@ -251,7 +312,7 @@ export default {
             position: "top-end",
             showConfirmButton: false,
             timer: 2000,
-            timerProgressBar: true,
+            timerProgressBar: false,
           });
 
           Toast.fire({
@@ -282,7 +343,7 @@ export default {
                   position: "top-end",
                   showConfirmButton: false,
                   timer: 2000,
-                  timerProgressBar: true,
+                  timerProgressBar: false,
                 });
 
                 Toast.fire({
@@ -290,7 +351,7 @@ export default {
                   title: "Post deleted",
                 });
                 axios.get(`${api}/get/posts`).then((res) => {
-                  this.posts = res.data;
+                  this.posts = res.data.reverse();
                 });
               }
             })
@@ -300,6 +361,47 @@ export default {
         }
       });
     },
+    savePost(id){
+      const postId = id;
+      const userEmail = this.user.email
+      
+      axios.post(`${api}/save/post`, { postId, userEmail }).then((res)=>{
+        // console.log(res)
+        if (res.status === 200) {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 2000,
+          });
+
+          Toast.fire({
+            icon: "success",
+            title: "Post saved",
+          });
+          axios.get(`${api}/get/posts`).then((res) => {
+            // console.log(res.data);
+            this.posts = res.data.reverse();
+          });
+        }
+      })
+    },
+    isLikedByCurrentUser(post) {
+      const currentUserId = this.user.id;
+      return post.reactions?.includes(currentUserId);
+    },
+    toggleLike(id){
+      const postId = id;
+      const userId = this.user.id;
+      axios.put(`${api}/toggle/like/${postId}/${userId}`).then((res)=>{
+        if(res.status == 200){
+          axios.get(`${api}/get/posts`).then((res) => {
+            this.posts = res.data.reverse();
+          });
+        }
+      });
+    },
+   
     //for human better looking time
     formatCreatedAt(createdAt) {
       const postCreatedAt = moment(createdAt, "ddd MMM DD YYYY HH:mm:ss");
@@ -317,21 +419,27 @@ export default {
       }
     },
   },
-  computed: {
-    // sortedPosts() {
-    //   // to show the latest post
-    //   return this.posts.slice().reverse();
-    // },
-  },
   mounted() {
     const userData = JSON.parse(localStorage.getItem("user"));
     // console.log(userData);
     const login_email = userData.email;
+    const userId = userData._id;
     this.user.email = login_email;
+    this.user.id = userId;
+
     axios.get(`${api}/get/posts`).then((res) => {
-      // console.log(res.data);
-      this.posts = res.data;
+      // console.log(res.data)
+      //  const posts = res.data.slice().reverse();
+      this.posts = res.data.map((post) => {
+        return {
+          ...post,
+          isLikedByCurrentUser: this.isLikedByCurrentUser(post),
+        };
+      }).reverse();
     });
+
+    
+    
   },
 };
 </script>
@@ -364,10 +472,9 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor:pointer;
 }
-.content-actions ul li {
-  background-color: #585858;
-}
+
 .bx-dots-horizontal-rounded {
   cursor: pointer;
   font-size: 20px;
@@ -393,5 +500,44 @@ export default {
   width: 100%;
   /* height: ; */
   object-fit: contain;
+}
+.bx-heart{
+  margin-right: 10px;
+  font-size: 20px;
+  cursor:pointer;
+}
+.bxs-heart{
+  margin-right: 10px;
+  font-size: 20px;
+  cursor:pointer;
+}
+.bx-message-dots{
+  margin-right: 10px;
+  font-size: 20px;
+  cursor:pointer;
+}
+.bx-share-alt{
+  margin-right: 10px;
+  font-size: 20px;
+  cursor:pointer;
+}
+.friend-card {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    border-radius: 2%;
+    box-shadow: 2px 2px 2px 2px;
+    box-sizing: border-box;
+    /* border: 1px solid #3d3d3d; */
+    background-color: rgb(255 255 255 / 91%);
+}
+
+.profile-pic {
+  width: 100px;
+  height: 100px;
+}
+.bxs-user-plus {
+  font-size: 30px;
+  cursor: pointer;
 }
 </style>

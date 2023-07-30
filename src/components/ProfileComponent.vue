@@ -35,13 +35,364 @@
                 <div
                   class="col-lg-6 col-md-12 col-sm-12 text-white bio-details"
                 >
-                  Yangon
+                  {{ this.userData.user_location ? this.userData.user_location : '-' }}
                 </div>
                 <div
                   class="col-lg-6 col-md-12 col-sm-12 text-white bio-details"
                 >
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Ipsam, fugit?
+                {{ this.userData.user_bio ? this.userData.user_bio : '-' }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container container-2">
+          <ul
+            class="d-flex justify-content-evenly sections list-unstyled"
+            id="myTab"
+            role="tablist"
+          >
+            <li class="nav-item" role="presentation">
+              <a
+                class="nav-link active text-info"
+                id="home-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#home"
+                type="button"
+                role="tab"
+                aria-controls="web"
+                aria-selected="true"
+                >Home</a
+              >
+            </li>
+
+            <li class="nav-item" role="presentation">
+              <a
+                class="nav-link text-info"
+                id="likes-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#likes"
+                type="button"
+                role="tab"
+                aria-controls="likes"
+                aria-selected="false"
+                >Likes</a
+              >
+            </li>
+            <li class="nav-item" role="presentation">
+              <a
+                class="nav-link text-info"
+                id="reposts-tab"
+                data-bs-toggle="tab"
+                data-bs-target="#reposts"
+                type="button"
+                role="tab"
+                aria-controls="reposts"
+                aria-selected="false"
+                >Reposts</a
+              >
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content">
+            <!-- home tab -->
+            <div
+              class="tab-pane active show"
+              id="home"
+              role="tabpanel"
+              aria-labelledby="home-tab"
+            >
+              <div
+                class="m-2"
+                v-for="(homePost, index) in homePosts"
+                :key="index"
+              >
+                <div
+                  class="post-card"
+                  v-if="homePost.creator[0]._id === this.profile_id"
+                >
+                  <!-- heading -->
+                  <div class="d-flex align-items-center p-2">
+                    <div class="img-div">
+                      <img
+                        :src="getImageUrl(homePost.creator[0].image)"
+                        class="rounded-circle w-100 h-100 object-fit-fill"
+                      />
+                    </div>
+                    <div class="ms-4 name-div">
+                      <p class="text-white mt-3">
+                        {{ homePost.creator[0].name }} |
+                        {{ homePost.creator[0].email }}
+                      </p>
+                      <p class="text-white">
+                        {{ formatCreatedAt(homePost.createdAt) }}
+                      </p>
+                      <!-- <p class="text-white">2 Hours Ago</p> -->
+                    </div>
+                    <div class="ms-auto dropdown">
+                      <i
+                        class="bx bx-dots-horizontal-rounded text-white"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                      ></i>
+                      <ul class="dropdown-menu">
+                        <li>
+                          <p
+                            class="dropdown-item"
+                            data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop1"
+                            v-if="homePost.creator[0].email == this.userData.email"
+                            @click="selectedPost = homePost"
+                          >
+                            Edit
+                          </p>
+                        </li>
+
+                        <li>
+                          <p class="dropdown-item" 
+                          v-if="homePost.creator[0].email == this.userData.email"
+                          @click="deletePost(homePost._id)"
+                          >
+                          Delete
+                          </p>
+                        </li>
+
+                        <li>
+                          <p class="dropdown-item" 
+                          v-if="homePost.creator[0].email == this.userData.email"
+                          @click="savePost(homePost._id)"
+                          >
+                          Save
+                          </p>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- linebreak -->
+                  <div class="p-1">
+                    <hr class="text-white" />
+                  </div>
+                  <!-- content -->
+                  <div class="content">
+                    <div class="content-img p-2">
+                      <img
+                        :src="getPostImageUrl(homePost.image)"
+                        class="w-100 h-100 object-fit-contain"
+                      />
+                    </div>
+                    <div class="p-1">
+                      <hr class="text-white" />
+                    </div>
+                    <div class="content-body p-2">
+                      <p class="text-white">{{ homePost.caption }}</p>
+                    </div>
+                    <div class="content-actions">
+                      <ul class="d-flex list-unstyled actions-div">
+                        <li
+                          class="w-100 d-flex align-items-center justify-content-center border border-info border-top-0 border-start-0 border-bottom-0 p-2"
+                        >
+                          <i class="bx bxs-heart-circle text-info"></i>
+                          <span class="action-text text-info">100Likes</span>
+                        </li>
+                        <li
+                          class="w-100 d-flex align-items-center justify-content-center border border-info border-top-0 border-start-0 border-bottom-0 p-2"
+                        >
+                          <i class="bx bxs-comment-dots text-info"></i>
+                          <span class="action-text text-info">100Chats</span>
+                        </li>
+                        <li
+                          class="w-100 d-flex align-items-center justify-content-center p-2"
+                        >
+                          <i class="bx bx-repost text-info"></i>
+                          <span class="action-text text-info">100Reposts</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- likes tab -->
+            <div
+              class="tab-pane"
+              id="likes"
+              role="tabpanel"
+              aria-labelledby="likes-tab"
+            >
+              <div class="post-card">
+                <!-- heading -->
+                <div class="d-flex align-items-center p-2">
+                  <div class="img-div">
+                    <img
+                      src=""
+                      class="rounded-circle w-100 h-100 object-fit-fill"
+                    />
+                  </div>
+                  <div class="ms-4 name-div">
+                    <p class="text-white mt-3">name | email || Likes</p>
+                    <p class="text-white">time</p>
+                    <!-- <p class="text-white">2 Hours Ago</p> -->
+                  </div>
+                  <div class="ms-auto dropdown">
+                    <i
+                      class="bx bx-dots-horizontal-rounded text-white"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    ></i>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <p
+                          class="dropdown-item"
+                          data-bs-toggle="modal"
+                          data-bs-target="#staticBackdrop"
+                        >
+                          Edit
+                        </p>
+                      </li>
+
+                      <li>
+                        <p class="dropdown-item">Delete</p>
+                      </li>
+
+                      <li>
+                        <router-link class="dropdown-item" to="#"
+                          >Save</router-link
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <!-- linebreak -->
+                <div class="p-1">
+                  <hr class="text-white" />
+                </div>
+                <!-- content -->
+                <div class="content">
+                  <div class="content-img p-2">
+                    <img src="" class="w-100 h-100 object-fit-contain" />
+                  </div>
+                  <div class="p-1">
+                    <hr class="text-white" />
+                  </div>
+                  <div class="content-body p-2">
+                    <p class="text-white">caption</p>
+                  </div>
+                  <div class="content-actions">
+                    <ul class="d-flex list-unstyled actions-div">
+                      <li
+                        class="w-100 d-flex align-items-center justify-content-center border border-info border-top-0 border-start-0 border-bottom-0 p-2"
+                      >
+                        <i class="bx bxs-heart-circle text-info"></i>
+                        <span class="action-text text-info">100Likes</span>
+                      </li>
+                      <li
+                        class="w-100 d-flex align-items-center justify-content-center border border-info border-top-0 border-start-0 border-bottom-0 p-2"
+                      >
+                        <i class="bx bxs-comment-dots text-info"></i>
+                        <span class="action-text text-info">100Chats</span>
+                      </li>
+                      <li
+                        class="w-100 d-flex align-items-center justify-content-center p-2"
+                      >
+                        <i class="bx bx-repost text-info"></i>
+                        <span class="action-text text-info">100Reposts</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- reposts tab -->
+            <div
+              class="tab-pane"
+              id="reposts"
+              role="tabpanel"
+              aria-labelledby="reposts-tab"
+            >
+              <div class="post-card">
+                <!-- heading -->
+                <div class="d-flex align-items-center p-2">
+                  <div class="img-div">
+                    <img
+                      src=""
+                      class="rounded-circle w-100 h-100 object-fit-fill"
+                    />
+                  </div>
+                  <div class="ms-4 name-div">
+                    <p class="text-white mt-3">name | email || Reposts</p>
+                    <p class="text-white">time</p>
+                    <!-- <p class="text-white">2 Hours Ago</p> -->
+                  </div>
+                  <div class="ms-auto dropdown">
+                    <i
+                      class="bx bx-dots-horizontal-rounded text-white"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    ></i>
+                    <ul class="dropdown-menu">
+                      <li>
+                        <p
+                          class="dropdown-item"
+                          data-bs-toggle="modal"
+                          data-bs-target="#staticBackdrop"
+                        >
+                          Edit
+                        </p>
+                      </li>
+
+                      <li>
+                        <p class="dropdown-item">Delete</p>
+                      </li>
+
+                      <li>
+                        <router-link class="dropdown-item" to="#"
+                          >Save</router-link
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <!-- linebreak -->
+                <div class="p-1">
+                  <hr class="text-white" />
+                </div>
+                <!-- content -->
+                <div class="content">
+                  <div class="content-img p-2">
+                    <img class="w-100 h-100 object-fit-contain" />
+                  </div>
+                  <div class="p-1">
+                    <hr class="text-white" />
+                  </div>
+                  <div class="content-body p-2">
+                    <p class="text-white">caption</p>
+                  </div>
+                  <div class="content-actions">
+                    <ul class="d-flex list-unstyled actions-div">
+                      <li
+                        class="w-100 d-flex align-items-center justify-content-center border border-info border-top-0 border-start-0 border-bottom-0 p-2"
+                      >
+                        <i class="bx bxs-heart-circle text-info"></i>
+                        <span class="action-text text-info">100Likes</span>
+                      </li>
+                      <li
+                        class="w-100 d-flex align-items-center justify-content-center border border-info border-top-0 border-start-0 border-bottom-0 p-2"
+                      >
+                        <i class="bx bxs-comment-dots text-info"></i>
+                        <span class="action-text text-info">100Chats</span>
+                      </li>
+                      <li
+                        class="w-100 d-flex align-items-center justify-content-center p-2"
+                      >
+                        <i class="bx bx-repost text-info"></i>
+                        <span class="action-text text-info">100Reposts</span>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
@@ -81,6 +432,7 @@
                     type="text"
                     class="form-control"
                     v-model="this.userData.name"
+                    placeholder="Enter your username"
                   />
                 </p>
                 <p class="text-dark mt-3">
@@ -88,7 +440,20 @@
                     type="text"
                     class="form-control"
                     v-model="this.userData.email"
+                    placeholder="Enter your email"
                   />
+                </p>
+                <p class="text-dark mt-3">
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="this.user_location"
+                    placeholder="Enter your location"
+                  />
+                </p>
+
+                <p class="text-dark mt-3">
+                  <textarea v-model="this.user_bio" cols="30" rows="5" class="form-control" placeholder="Describe about yourself"></textarea>
                 </p>
               </div>
             </div>
@@ -116,9 +481,7 @@
                 v-if="previewImageStatus"
               />
             </div>
-            <div class="content-img p-2">
-              <img class="w-100 h-100 object-fit-contain" />
-            </div>
+            
             <!-- Display other properties of the selected post -->
           </div>
         </div>
@@ -135,11 +498,93 @@
       </div>
     </div>
   </div>
+
+  <!-- edit post Modal -->
+  <div class="modal fade5" id="staticBackdrop1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">
+            Edit your post
+          </h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div v-if="selectedPost">
+            <div class="d-flex align-items-center p-2">
+              <div class="img-div">
+                <img
+                  :src="getImageUrl(selectedPost.creator[0].image)"
+                  class="rounded-circle w-100 h-100 object-fit-fill"
+                />
+              </div>
+              <div class="ms-4 name-div">
+                <p class="text-dark mt-3">
+                  {{ selectedPost.creator[0].name }}
+                </p>
+              </div>
+            </div>
+            <input
+              type="text"
+              class="form-control"
+              v-model="selectedPost.caption"
+            />
+            <div class="d-flex justify-content-end mt-2 bg-dark">
+              <label for="imageInput" class="file-input-label">
+                <i class="bx bxs-camera text-white"></i>
+                <input
+                  type="file"
+                  id="imageInput"
+                  accept="image/*"
+                  @change="handleImageSelect"
+                  class="d-none"
+                />
+              </label>
+            </div>
+            <!-- imagepreview -->
+            <div class="d-flex justify-content-center">
+              <img
+                ref="imagePreview"
+                id="postImagePreview"
+                src=""
+                alt="Preview"
+                v-if="previewImageStatus"
+                class=""
+              />
+            </div>
+            <div class="content-img p-2">
+              <img
+                :src="getPostImageUrl(selectedPost.image)"
+                class="w-100 h-100 object-fit-contain"
+              />
+            </div>
+            <!-- Display other properties of the selected post -->
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            @click="updatePost(selectedPost._id)"
+          >
+            Update
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 import axios from "axios";
 import Swal from "sweetalert2";
+import moment from "moment";
 import LayoutComponent from "../components/LayoutComponent.vue";
 const api = "http://localhost:8000";
 export default {
@@ -150,18 +595,28 @@ export default {
   data() {
     return {
       userData: {},
+      user_location:"",
+      user_bio:"",
       previewImageStatus: "",
       profile_image: "",
       profile_id: "",
+      homePosts: [],
+      updateProfileImage:'',
+      selectedPost: null,
+      newPostImage:"",
     };
   },
   methods: {
     getImageUrl(filename) {
       return `${api}/pfp/${filename}`;
     },
+    getPostImageUrl(filename) {
+      return `${api}/uploads/${filename}`;
+    },
     handleImageSelect(event) {
       const file = event.target.files[0];
-      this.profile_image = file;
+      this.updateProfileImage = file;
+      this.newPostImage = file;
 
       const reader = new FileReader();
 
@@ -182,7 +637,9 @@ export default {
       formData.append("user_id", profile_id);
       formData.append("update_user_name", this.userData.name);
       formData.append("update_user_email", this.userData.email);
-      formData.append("ProfileImage", this.profile_image);
+      formData.append("update_user_location", this.user_location);
+      formData.append("update_user_bio", this.user_bio);
+      formData.append("ProfileImage", this.updateProfileImage);
       formData.append("updated_at", new Date());
       axios.put(`${api}/update/profile`, formData).then((res) => {
         // console.log(res.data);
@@ -191,6 +648,8 @@ export default {
             // console.log(res.data);
             this.userData.name = res.data.name;
             this.userData.email = res.data.email;
+            this.userData.user_location = res.data.user_location;
+            this.userData.user_bio = res.data.user_bio;
             this.profile_image = res.data.image;
             localStorage.setItem("user", JSON.stringify(res.data));
             const Toast = Swal.mixin({
@@ -198,7 +657,7 @@ export default {
               position: "top-end",
               showConfirmButton: false,
               timer: 2000,
-              timerProgressBar: true,
+              timerProgressBar: false,
             });
 
             Toast.fire({
@@ -209,23 +668,207 @@ export default {
         }
       });
     },
+    updatePost(id) {
+      const postId = id;
+      const file = this.newPostImage;
+      var formData = new FormData();
+      formData.append("uploadType", "postUpdatePicture");
+      formData.append("post_id", postId);
+      formData.append("new_caption", this.selectedPost.caption);
+      formData.append("new_image", file);
+      formData.append("updated_at", new Date());
+      axios.put(`${api}/update/post`, formData).then((res) => {
+        // console.log(res.data);
+        if (res.status == 200) {
+          axios.get(`${api}/get/posts`).then((res) => {
+            this.homePosts = res.data.reverse();
+          });
+
+          this.$router.push("/profile");
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: false,
+          });
+
+          Toast.fire({
+            icon: "success",
+            title: "Post updated",
+          });
+        }
+      });
+    },
+    deletePost(id) {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // alert(id);
+          axios
+            .delete(`${api}/delete/post/${id}`)
+            .then((res) => {
+              if (res.status == 200) {
+                const Toast = Swal.mixin({
+                  toast: true,
+                  position: "top-end",
+                  showConfirmButton: false,
+                  timer: 2000,
+                  timerProgressBar: false,
+                });
+
+                Toast.fire({
+                  icon: "success",
+                  title: "Post deleted",
+                });
+                axios.get(`${api}/get/posts`).then((res) => {
+                  this.homePosts = res.data;
+                });
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+      });
+    },
+
+    savePost(id){
+      const postId = id;
+      const userEmail = this.userData.email;
+      const created_at = new Date();
+      
+      axios.post(`${api}/save/post`, { postId, userEmail,created_at }).then((res)=>{
+        // console.log(res)
+        if (res.status === 200) {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 2000,
+          });
+
+          Toast.fire({
+            icon: "success",
+            title: "Post saved",
+          });
+          axios.get(`${api}/get/posts`).then((res) => {
+            // console.log(res.data);
+            this.homePosts = res.data.reverse();
+          });
+        }
+      })
+    },
+    formatCreatedAt(createdAt) {
+      const postCreatedAt = moment(createdAt, "ddd MMM DD YYYY HH:mm:ss");
+      const now = moment();
+      const diffInDays = now.diff(postCreatedAt, "days");
+      const diffInHours = now.diff(postCreatedAt, "hours");
+      const diffInMinutes = now.diff(postCreatedAt, "minutes");
+
+      if (diffInDays > 0) {
+        return `${diffInDays} days ago`;
+      } else if (diffInHours > 0) {
+        return `${diffInHours} hours ago`;
+      } else {
+        return `${diffInMinutes} minutes ago`;
+      }
+    },
   },
   mounted() {
     const user = JSON.parse(localStorage.getItem("user"));
     // console.log(user.name);
     this.userData.name = user.name;
     this.userData.email = user.email;
+    this.userData.user_location = user.user_location;
+    this.userData.user_bio = user.user_bio;
+    this.user_location = user.user_location;
+    this.user_bio = user.user_bio;
     this.profile_image = user.image;
     this.profile_id = user._id;
+    axios.get(`${api}/get/posts`).then((res) => {
+      // console.log(res.data);
+      // console.log(this.profile_id);
+      this.homePosts = res.data.reverse();
+    });
   },
 };
 </script>
 
 <style scoped>
-.edit-profile-picture {
+.post-card {
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  border: 1px solid #3d3d3d;
+  background-color: rgba(48, 48, 48, 0.911);
+}
+.img-div {
+  width: 60px;
+  height: 60px;
+}
+.name-div {
+  line-height: 1;
+}
+.content-img {
+  width: 100%;
+  height: 350px;
+}
+.actions-div {
+  justify-content: space-around;
+  align-items: center;
+}
+.action-text {
+  /* max-width: 0px; Adjust the width as needed */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.content-actions ul li {
+  background-color: #585858;
+}
+.bx-dots-horizontal-rounded {
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.sections {
+  margin-top: 90px !important;
+  background-color: #070c1057;
+  padding: 40px;
+}
+.sections li {
+  position: relative;
+}
+.sections a::after {
+  content: "";
+  width: 0%;
+  height: 2px;
+  background-color: #0aceff;
+  box-shadow: 0 0 3px #00fff2, 0 0 #03ffdd, 0 0 #0aceff, 0 0 10px #00e9ff,
+    0 0 10px #0ae2f6, 0 0 #00ffe6, 0 0 #04dcff, 0 0 #00e2ff;
+
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  transition: 0.5s;
+}
+
+.sections a:hover::after,
+.sections .active::after {
+  width: 100%;
+}
+/* .edit-profile-picture {
   width: 300px !important;
   height: 300px !important;
-}
+} */
 .file-input-label {
   display: inline-block;
   padding: 10px;
@@ -240,10 +883,14 @@ export default {
 #imagePreview {
   width: 100%;
   /* height: ; */
-  width: 300px !important;
+  /* width: 300px !important; */
   height: 300px !important;
   border-radius: 50%;
   /* object-fit: contain; */
+}
+#postImagePreview{
+  width: 100%;
+  /* height: ; */
 }
 .bg-custom-grey {
   background-color: rgba(16, 16, 16, 0.782);
@@ -283,6 +930,11 @@ export default {
 .container {
   position: absolute;
   top: 190%;
+  left: 10%;
+}
+.container-2 {
+  position: absolute;
+  top: 230%;
   left: 10%;
 }
 .bio-details {

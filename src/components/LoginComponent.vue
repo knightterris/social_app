@@ -82,7 +82,7 @@ export default {
                 position: "top-end",
                 showConfirmButton: false,
                 timer: 3000,
-                timerProgressBar: true,
+                timerProgressBar: false,
               });
 
               Toast.fire({
@@ -102,7 +102,7 @@ export default {
                 position: "top-end",
                 showConfirmButton: false,
                 timer: 3000,
-                timerProgressBar: true,
+                timerProgressBar: false,
               });
 
               Toast.fire({

@@ -7,6 +7,7 @@ import NotiView from "../views/NotiView.vue";
 import FriendView from "../views/FriendView.vue";
 import MessageView from "../views/MessageView.vue";
 import CreatePostView from "../views/CreatePostView.vue";
+import SearchView from "../views/SearchView.vue";
 
 const routes = [
   {
@@ -49,6 +50,11 @@ const routes = [
     path: "/post",
     name: "post",
     component: CreatePostView,
+  },
+  {
+    path: "/search",
+    name: "search",
+    component: SearchView,
   },
 ];
 

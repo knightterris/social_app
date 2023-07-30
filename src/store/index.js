@@ -5,11 +5,29 @@ export default createStore({
     userData: localStorage.getItem("user")
       ? JSON.parse(localStorage.getItem("user"))
       : {},
+      searchResult:[],
+      search_key:"",
   },
   getters: {
     getUserData: (state) => state.userData,
+    getSearchResult: (state) => state.searchResult,
+    getSearchKey: (state) => state.search_key,
   },
-  mutations: {},
-  actions: {},
+  mutations: {
+    setSearchResult(state, result) {
+      state.searchResult = result;
+    },
+    setSearchKey(state, search_key){
+      state.search_key = search_key;
+    }
+  },
+  actions: {
+    saveSearchResult({ commit }, result) {
+      commit('setSearchResult', result);
+    },
+    saveSearchKey({ commit }, search_key) {
+      commit('setSearchKey', search_key);
+    }
+  },
   modules: {},
 });
