@@ -90,8 +90,8 @@ export default {
                 title: "Login is successful.",
               });
               localStorage.setItem("token", res.data.token);
-              this.$store.dispatch('saveUserData',res.data.user);
-              // localStorage.setItem("user", JSON.stringify(res.data.user));
+              // this.$store.dispatch('saveUserData',res.data.user);
+              localStorage.setItem("user", JSON.stringify(res.data.user));
             }
           })
           .catch((error) => {

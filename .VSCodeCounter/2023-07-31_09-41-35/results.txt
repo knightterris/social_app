@@ -1,0 +1,78 @@
+Date : 2023-07-31 09:41:35
+Directory : /home/aungkaungmyat/Desktop/Laravel Chat App/frontend
+Total : 36 files,  18213 codes, 1089 comments, 200 blanks, all 19502 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| JSON               |          4 |     15,697 |          0 |          4 |     15,701 |
+| Vue                |         20 |      1,965 |      1,045 |        137 |      3,147 |
+| JavaScript         |          8 |        466 |         32 |         41 |        539 |
+| Markdown           |          1 |         38 |          0 |         14 |         52 |
+| HTML               |          1 |         36 |          0 |          3 |         39 |
+| JSON with Comments |          1 |          8 |         12 |          0 |         20 |
+| XML                |          1 |          3 |          0 |          1 |          4 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                         | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                            |         36 |     18,213 |      1,089 |        200 |     19,502 |
+| . (Files)                                                                                    |          7 |     13,599 |         12 |         19 |     13,630 |
+| public                                                                                       |          2 |         39 |          0 |          4 |         43 |
+| public (Files)                                                                               |          1 |         36 |          0 |          3 |         39 |
+| public/img                                                                                   |          1 |          3 |          0 |          1 |          4 |
+| public/img/icons                                                                             |          1 |          3 |          0 |          1 |          4 |
+| server                                                                                       |          3 |      2,483 |         25 |         28 |      2,536 |
+| src                                                                                          |         24 |      2,092 |      1,052 |        149 |      3,293 |
+| src (Files)                                                                                  |          3 |         38 |          5 |          6 |         49 |
+| src/components                                                                               |         10 |      1,815 |      1,039 |        109 |      2,963 |
+| src/router                                                                                   |          1 |         62 |          0 |          5 |         67 |
+| src/store                                                                                    |          1 |         30 |          6 |          2 |         38 |
+| src/views                                                                                    |          9 |        147 |          2 |         27 |        176 |
++----------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                                                                     | language           | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/.eslintrc.js                           | JavaScript         |         17 |          0 |          1 |         18 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/README.md                              | Markdown           |         38 |          0 |         14 |         52 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/babel.config.js                        | JavaScript         |          5 |          0 |          1 |          6 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/jsconfig.json                          | JSON with Comments |          8 |         12 |          0 |         20 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/package-lock.json                      | JSON               |     13,478 |          0 |          1 |     13,479 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/package.json                           | JSON               |         39 |          0 |          1 |         40 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/public/img/icons/safari-pinned-tab.svg | XML                |          3 |          0 |          1 |          4 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/public/index.html                      | HTML               |         36 |          0 |          3 |         39 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/server/index.js                        | JavaScript         |        303 |         25 |         26 |        354 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/server/package-lock.json               | JSON               |      2,155 |          0 |          1 |      2,156 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/server/package.json                    | JSON               |         25 |          0 |          1 |         26 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/App.vue                            | Vue                |          3 |          4 |          1 |          8 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/components/CreatePostComponent.vue | Vue                |         36 |        146 |          1 |        183 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/components/FriendComponent.vue     | Vue                |        117 |          2 |          7 |        126 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/components/IndexComponent.vue      | Vue                |        211 |        328 |         10 |        549 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/components/LayoutComponent.vue     | Vue                |        180 |         10 |         17 |        207 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/components/LoginComponent.vue      | Vue                |        168 |          6 |         15 |        189 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/components/MessageComponent.vue    | Vue                |         22 |          0 |          3 |         25 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/components/NotiComponent.vue       | Vue                |         56 |          4 |          6 |         66 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/components/ProfileComponent.vue    | Vue                |        664 |        415 |         26 |      1,105 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/components/RegisterComponent.vue   | Vue                |        199 |          5 |         17 |        221 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/components/SearchComponent.vue     | Vue                |        162 |        123 |          7 |        292 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/main.js                            | JavaScript         |          6 |          0 |          2 |          8 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/registerServiceWorker.js           | JavaScript         |         29 |          1 |          3 |         33 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/router/index.js                    | JavaScript         |         62 |          0 |          5 |         67 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/store/index.js                     | JavaScript         |         30 |          6 |          2 |         38 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/views/CreatePostView.vue           | Vue                |         15 |          0 |          3 |         18 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/views/FriendView.vue               | Vue                |         15 |          0 |          3 |         18 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/views/IndexView.vue                | Vue                |         15 |          0 |          3 |         18 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/views/LoginView.vue                | Vue                |         21 |          1 |          3 |         25 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/views/MessageView.vue              | Vue                |         15 |          0 |          3 |         18 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/views/NotiView.vue                 | Vue                |         15 |          0 |          3 |         18 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/views/ProfileView.vue              | Vue                |         15 |          0 |          3 |         18 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/views/RegisterView.vue             | Vue                |         21 |          1 |          3 |         25 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/src/views/SearchView.vue               | Vue                |         15 |          0 |          3 |         18 |
+| /home/aungkaungmyat/Desktop/Laravel Chat App/frontend/vue.config.js                          | JavaScript         |         14 |          0 |          1 |         15 |
+| Total                                                                                        |                    |     18,213 |      1,089 |        200 |     19,502 |
++----------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+

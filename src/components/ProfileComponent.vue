@@ -161,7 +161,6 @@
 
                         <li>
                           <p class="dropdown-item" 
-                          v-if="homePost.creator[0].email == this.userData.email"
                           @click="savePost(homePost._id)"
                           >
                           Save
@@ -171,12 +170,12 @@
                     </div>
                   </div>
                   <!-- linebreak -->
-                  <div class="p-1">
+                  <div class="p-1" v-if="homePost.image">
                     <hr class="text-white" />
                   </div>
                   <!-- content -->
                   <div class="content">
-                    <div class="content-img p-2">
+                    <div class="content-img p-2" v-if="homePost.image">
                       <img
                         :src="getPostImageUrl(homePost.image)"
                         class="w-100 h-100 object-fit-contain"
@@ -193,20 +192,25 @@
                         <li
                           class="w-100 d-flex align-items-center justify-content-center border border-info border-top-0 border-start-0 border-bottom-0 p-2"
                         >
-                          <i class="bx bxs-heart-circle text-info"></i>
-                          <span class="action-text text-info">100Likes</span>
+                          <i class="text-info me-3 bx" :class="{'bxs-heart': isLikedByCurrentUser(homePost), 'bx-heart': !isLikedByCurrentUser(homePost)}" 
+                            @click="toggleLike(homePost._id)"
+                          >
+                          </i>
+
+                          <span class="action-text text-info " data-bs-toggle="modal"
+                              data-bs-target="#likeUsers" @click="showLikeUser = homePost">{{ homePost.reactions?.length ? homePost.reactions?.length : 0}}</span>
                         </li>
                         <li
                           class="w-100 d-flex align-items-center justify-content-center border border-info border-top-0 border-start-0 border-bottom-0 p-2"
                         >
-                          <i class="bx bxs-comment-dots text-info"></i>
-                          <span class="action-text text-info">100Chats</span>
+                          <i class='bx bx-message-dots text-info me-3'></i>
+                          <span class="action-text text-info">100</span>
                         </li>
                         <li
                           class="w-100 d-flex align-items-center justify-content-center p-2"
                         >
-                          <i class="bx bx-repost text-info"></i>
-                          <span class="action-text text-info">100Reposts</span>
+                          <i class='bx bx-share-alt text-info me-3'></i>
+                          <span class="action-text text-info">100</span>
                         </li>
                       </ul>
                     </div>
@@ -217,92 +221,123 @@
 
             <!-- likes tab -->
             <div
-              class="tab-pane"
+              class="tab-pane show"
               id="likes"
               role="tabpanel"
               aria-labelledby="likes-tab"
             >
-              <div class="post-card">
-                <!-- heading -->
-                <div class="d-flex align-items-center p-2">
-                  <div class="img-div">
-                    <img
-                      src=""
-                      class="rounded-circle w-100 h-100 object-fit-fill"
-                    />
-                  </div>
-                  <div class="ms-4 name-div">
-                    <p class="text-white mt-3">name | email || Likes</p>
-                    <p class="text-white">time</p>
-                    <!-- <p class="text-white">2 Hours Ago</p> -->
-                  </div>
-                  <div class="ms-auto dropdown">
-                    <i
-                      class="bx bx-dots-horizontal-rounded text-white"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    ></i>
-                    <ul class="dropdown-menu">
-                      <li>
-                        <p
-                          class="dropdown-item"
-                          data-bs-toggle="modal"
-                          data-bs-target="#staticBackdrop"
-                        >
-                          Edit
+              <div
+                  class="m-2"
+                  v-for="(likedPost, index) in likedPosts"
+                  :key="index"
+                >
+                  <div
+                    class="post-card"
+                  
+                  >
+                    <!-- heading -->
+                    <div class="d-flex align-items-center p-2">
+                      <div class="img-div">
+                        <img
+                          :src="getImageUrl(likedPost.creator[0].image)"
+                          class="rounded-circle w-100 h-100 object-fit-fill"
+                        />
+                      </div>
+                      <div class="ms-4 name-div">
+                        <p class="text-white mt-3">
+                          {{ likedPost.creator[0].name }} |
+                          {{ likedPost.creator[0].email }}
                         </p>
-                      </li>
+                        <p class="text-white">
+                          {{ formatCreatedAt(likedPost.createdAt) }}
+                        </p>
+                        <!-- <p class="text-white">2 Hours Ago</p> -->
+                      </div>
+                      <div class="ms-auto dropdown">
+                        <i
+                          class="bx bx-dots-horizontal-rounded text-white"
+                          data-bs-toggle="dropdown"
+                          aria-expanded="false"
+                        ></i>
+                        <ul class="dropdown-menu">
+                          <li>
+                            <p
+                              class="dropdown-item"
+                              data-bs-toggle="modal"
+                              data-bs-target="#staticBackdrop1"
+                              v-if="likedPost.creator[0].email == this.userData.email"
+                              @click="selectedPost = likedPost"
+                            >
+                              Edit
+                            </p>
+                          </li>
 
-                      <li>
-                        <p class="dropdown-item">Delete</p>
-                      </li>
+                          <li>
+                            <p class="dropdown-item" 
+                            v-if="likedPost.creator[0].email == this.userData.email"
+                            @click="deletePost(likedPost._id)"
+                            >
+                            Delete
+                            </p>
+                          </li>
 
-                      <li>
-                        <router-link class="dropdown-item" to="#"
-                          >Save</router-link
-                        >
-                      </li>
-                    </ul>
+                          <li>
+                            <p class="dropdown-item" 
+                            @click="savePost(likedPost._id)"
+                            >
+                            Save
+                            </p>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <!-- linebreak -->
+                    <div class="p-1" v-if="likedPost.image">
+                      <hr class="text-white" />
+                    </div>
+                    <!-- content -->
+                    <div class="content">
+                      <div class="content-img p-2" v-if="likedPost.image">
+                        <img
+                          :src="getPostImageUrl(likedPost.image)"
+                          class="w-100 h-100 object-fit-contain"
+                        />
+                      </div>
+                      <div class="p-1">
+                        <hr class="text-white" />
+                      </div>
+                      <div class="content-body p-2">
+                        <p class="text-white">{{ likedPost.caption }}</p>
+                      </div>
+                      <div class="content-actions">
+                        <ul class="d-flex list-unstyled actions-div">
+                          <li
+                            class="w-100 d-flex align-items-center justify-content-center border border-info border-top-0 border-start-0 border-bottom-0 p-2"
+                          >
+                            <i class="text-info me-3 bx" :class="{'bxs-heart': isLikedByCurrentUser(likedPost), 'bx-heart': !isLikedByCurrentUser(likedPost)}" 
+                              @click="toggleLike(likedPost._id)"
+                            >
+                            </i>
+
+                            <span class="action-text text-info " data-bs-toggle="modal"
+                                data-bs-target="#likeUsers" @click="showLikeUser = likedPost">{{ likedPost.reactions?.length ? likedPost.reactions?.length : 0}}</span>
+                          </li>
+                          <li
+                            class="w-100 d-flex align-items-center justify-content-center border border-info border-top-0 border-start-0 border-bottom-0 p-2"
+                          >
+                            <i class='bx bx-message-dots text-info me-3'></i>
+                            <span class="action-text text-info">100</span>
+                          </li>
+                          <li
+                            class="w-100 d-flex align-items-center justify-content-center p-2"
+                          >
+                            <i class='bx bx-share-alt text-info me-3'></i>
+                            <span class="action-text text-info">100</span>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <!-- linebreak -->
-                <div class="p-1">
-                  <hr class="text-white" />
-                </div>
-                <!-- content -->
-                <div class="content">
-                  <div class="content-img p-2">
-                    <img src="" class="w-100 h-100 object-fit-contain" />
-                  </div>
-                  <div class="p-1">
-                    <hr class="text-white" />
-                  </div>
-                  <div class="content-body p-2">
-                    <p class="text-white">caption</p>
-                  </div>
-                  <div class="content-actions">
-                    <ul class="d-flex list-unstyled actions-div">
-                      <li
-                        class="w-100 d-flex align-items-center justify-content-center border border-info border-top-0 border-start-0 border-bottom-0 p-2"
-                      >
-                        <i class="bx bxs-heart-circle text-info"></i>
-                        <span class="action-text text-info">100Likes</span>
-                      </li>
-                      <li
-                        class="w-100 d-flex align-items-center justify-content-center border border-info border-top-0 border-start-0 border-bottom-0 p-2"
-                      >
-                        <i class="bx bxs-comment-dots text-info"></i>
-                        <span class="action-text text-info">100Chats</span>
-                      </li>
-                      <li
-                        class="w-100 d-flex align-items-center justify-content-center p-2"
-                      >
-                        <i class="bx bx-repost text-info"></i>
-                        <span class="action-text text-info">100Reposts</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -399,6 +434,47 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- show like users modal -->
+    <div class="modal fade5" id="likeUsers">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                Liked by
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              <div class="" v-if="showLikeUser.liked_users != []">
+                <div class="m-2 p-2" v-for="(users,index) in showLikeUser.liked_users" :key="index">
+                    <div class="friend-card">
+                      <div class="d-flex align-items-center p-2">
+                        <div class="parent-profile-card">
+                          <img
+                          :src="getImageUrl(users.image)"
+                            class="rounded-circle object-fit-fill profile-pic"
+                          />
+                        </div>
+                        <div class="ms-4 name-div">
+                          <p class="text-dark mt-3">{{ users.name }}</p>
+                        </div>
+                        <div class="ms-auto">
+                          <i class="bx bxs-user-plus text-dark"></i>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
   </LayoutComponent>
 
@@ -557,7 +633,7 @@
                 class=""
               />
             </div>
-            <div class="content-img p-2">
+            <div class="content-img p-2" >
               <img
                 :src="getPostImageUrl(selectedPost.image)"
                 class="w-100 h-100 object-fit-contain"
@@ -601,9 +677,11 @@ export default {
       profile_image: "",
       profile_id: "",
       homePosts: [],
+      likedPosts: [],
       updateProfileImage:'',
       selectedPost: null,
       newPostImage:"",
+      showLikeUser:[],
     };
   },
   methods: {
@@ -651,8 +729,8 @@ export default {
             this.userData.user_location = res.data.user_location;
             this.userData.user_bio = res.data.user_bio;
             this.profile_image = res.data.image;
-            this.$store.dispatch('saveUserData',res.data);
-            // localStorage.setItem("user", JSON.stringify(res.data));
+            // this.$store.dispatch('saveUserData',res.data);
+            localStorage.setItem("user", JSON.stringify(res.data));
             const Toast = Swal.mixin({
               toast: true,
               position: "top-end",
@@ -767,6 +845,32 @@ export default {
         }
       })
     },
+    isLikedByCurrentUser(post) {
+      const currentUserId = this.userData.id;
+      return post.reactions?.includes(currentUserId);
+    },
+    toggleLike(id){
+      const postId = id;
+      const userId = this.userData.id;
+      axios.put(`${api}/toggle/like/${postId}/${userId}`).then((res)=>{
+        if(res.status == 200){
+          axios.get(`${api}/get/posts`).then((res) => {
+            // this.homePosts = res.data.reverse();
+            this.homePosts = res.data.map((post) => {
+              return {
+                ...post,
+                isLikedByCurrentUser: this.isLikedByCurrentUser(post),
+              };
+            }).reverse();
+            const likedPosts = res.data.filter(post => post.reactions?.includes(this.userData.id));
+            this.likedPosts = likedPosts.map(post => ({
+                ...post,
+                isLikedByCurrentUser: this.isLikedByCurrentUser(post),
+              })).reverse();
+          });
+        }
+      });
+    },
     formatCreatedAt(createdAt) {
       const postCreatedAt = moment(createdAt, "ddd MMM DD YYYY HH:mm:ss");
       const now = moment();
@@ -784,9 +888,10 @@ export default {
     },
   },
   mounted() {
-    const user = this.$store.getters.getUserData;
-    // const user = JSON.parse(localStorage.getItem("user"));
+    // const user = this.$store.getters.getUserData;
+    const user = JSON.parse(localStorage.getItem("user"));
     // console.log(user.name);
+    this.userData.id = user._id;
     this.userData.name = user.name;
     this.userData.email = user.email;
     this.userData.user_location = user.user_location;
@@ -796,9 +901,22 @@ export default {
     this.profile_image = user.image;
     this.profile_id = user._id;
     axios.get(`${api}/get/posts`).then((res) => {
-      // console.log(res.data);
-      // console.log(this.profile_id);
-      this.homePosts = res.data.reverse();
+      this.homePosts = res.data.map((post) => {
+        return {
+          ...post,
+          isLikedByCurrentUser: this.isLikedByCurrentUser(post),
+        };
+      }).reverse();
+    });
+    axios.get(`${api}/get/liked/posts/${this.userData.id}`).then((res) => {
+      // console.log(res.data)
+      this.likedPosts = res.data.map((post) => {
+        return {
+          ...post,
+          isLikedByCurrentUser: this.isLikedByCurrentUser(post),
+        };
+      }).reverse();
+      // console.log(this.likedPosts)
     });
   },
 };
@@ -832,10 +950,9 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor:pointer;
 }
-.content-actions ul li {
-  background-color: #585858;
-}
+
 .bx-dots-horizontal-rounded {
   cursor: pointer;
   font-size: 20px;
@@ -941,6 +1058,40 @@ export default {
 }
 .bio-details {
   line-height: 2;
+}
+
+.friend-card {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    border-radius: 2%;
+    box-shadow: 2px 2px 2px 2px;
+    box-sizing: border-box;
+    /* border: 1px solid #3d3d3d; */
+    background-color: rgb(255 255 255 / 91%);
+}
+
+.profile-pic {
+  width: 100px;
+  height: 100px;
+}
+.bxs-user-plus {
+  font-size: 30px;
+  cursor: pointer;
+}
+.bxs-heart{
+  cursor:pointer;
+}
+.bx-heart{
+  cursor:pointer;
+}
+
+.bx-message-dots{
+  cursor:pointer;
+}
+
+.bx-share-alt{
+  cursor:pointer;
 }
 @media screen and (max-width: 1250px) {
   .user-name {

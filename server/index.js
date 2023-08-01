@@ -137,9 +137,48 @@ app.get("/get/posts", async (req, res) => {
      
     ])
     .toArray();
-    console.log(posts)
+    // console.log(posts)
   res.json(posts);
 });
+app.get('/get/liked/posts/:userId', async (req, res) => {
+  const userID = req.params.userId;
+  const likedPosts = await db.collection('posts').aggregate([
+    // Filter posts by reactions
+    { 
+      $match: {
+        reactions: new ObjectId(userID)
+      }
+    },
+    // Join user data for reaction
+    { 
+      $lookup: {
+        from: 'users',
+        localField: 'reactions', 
+        foreignField: '_id',
+        as: 'likedBy'
+      }
+    },
+    // join user data for creator credentials
+    { 
+      $lookup: {
+        from: "users",
+        localField: "creatorEmail",
+        foreignField: "email",
+        as: "creator",
+      }
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "reactions",
+        foreignField: "_id",
+        as: "liked_users",
+      },
+    },
+
+  ]).toArray();
+  res.status(200).json(likedPosts)
+})
 
 //update post
 app.put("/update/post", upload.single("new_image"), async (req, res) => {

@@ -129,8 +129,8 @@ export default {
   mounted() {
     // this.userData = this.$store.getters.getUserData;
     // console.log(this.userData);
-    const user = this.$store.getters.getUserData;
-    // const user = JSON.parse(localStorage.getItem("user"));
+    // const user = this.$store.getters.getUserData;
+    const user = JSON.parse(localStorage.getItem("user"));
     // console.log(user.name);
     this.userData.name = user.name;
     this.userData.email = user.email;

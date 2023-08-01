@@ -401,7 +401,6 @@ export default {
         }
       });
     },
-   
     //for human better looking time
     formatCreatedAt(createdAt) {
       const postCreatedAt = moment(createdAt, "ddd MMM DD YYYY HH:mm:ss");
@@ -420,19 +419,12 @@ export default {
     },
   },
   mounted() {
-    console.log(this.$store.state.userData)
-    console.log(this.$store.getters.getUserData.name)
-    const userData = this.$store.getters.getUserData;
-    // const userData = JSON.parse(localStorage.getItem("user"));
-    // console.log(userData);
+    const userData = JSON.parse(localStorage.getItem("user"));
     const login_email = userData.email;
     const userId = userData._id;
     this.user.email = login_email;
     this.user.id = userId;
-
     axios.get(`${api}/get/posts`).then((res) => {
-      // console.log(res.data)
-      //  const posts = res.data.slice().reverse();
       this.posts = res.data.map((post) => {
         return {
           ...post,
@@ -475,8 +467,10 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  cursor:pointer;
 }
+/* .content-actions ul li {
+  background-color: #585858;
+} */
 
 .bx-dots-horizontal-rounded {
   cursor: pointer;
